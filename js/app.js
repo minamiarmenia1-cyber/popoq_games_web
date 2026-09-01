@@ -10,6 +10,10 @@
   var C = window.CONTENT;
   var I18N = window.I18N;
 
+  /* Адрес склеивается из двух полей и нигде не выводится на страницу —
+     ни текстом, ни в разметке. Спам-боты ищут готовую строку с «@». */
+  var EMAIL = C.studio.emailName + '@' + C.studio.emailHost;
+
   var $  = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
@@ -199,10 +203,56 @@
     }).join('');
   }
 
+  function renderFaq(lang) {
+    var box = $('#faqList');
+    if (!box || !C.faq) return;
+
+    box.innerHTML = C.faq.map(function (item, i) {
+      var id = 'faq-a-' + i;
+      return '<div class="faq__item" data-reveal style="--i:' + Math.min(i, 4) + '">' +
+        '<h3>' +
+          '<button class="faq__q" type="button" aria-expanded="false" aria-controls="' + id + '">' +
+            '<span class="mono faq__num">' + ('0' + (i + 1)).slice(-2) + '</span>' +
+            '<span class="faq__text">' + esc(I18N.pick(item.q, lang)) + '</span>' +
+            '<span class="faq__icon" aria-hidden="true"></span>' +
+          '</button>' +
+        '</h3>' +
+        '<div class="faq__panel" id="' + id + '" role="region">' +
+          '<p>' + esc(I18N.pick(item.a, lang)) + '</p>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  /** Аккордеон: одновременно открыт только один ответ. */
+  function initFaq() {
+    var box = $('#faqList');
+    if (!box || box.dataset.faqBound) return;
+    box.dataset.faqBound = '1';
+
+    box.addEventListener('click', function (e) {
+      var btn = e.target.closest('.faq__q');
+      if (!btn) return;
+
+      var open = btn.getAttribute('aria-expanded') === 'true';
+
+      $$('.faq__q', box).forEach(function (other) {
+        other.setAttribute('aria-expanded', 'false');
+        other.closest('.faq__item').classList.remove('is-open');
+      });
+
+      if (!open) {
+        btn.setAttribute('aria-expanded', 'true');
+        btn.closest('.faq__item').classList.add('is-open');
+      }
+    });
+  }
+
   /** Всё, что зависит одновременно от языка и от данных студии. */
   function renderDynamic(lang) {
     renderGames(lang);
     renderTeam(lang);
+    renderFaq(lang);
     renderMarquee(lang);
 
     // Подсказки про переворот зависят от устройства: мышь или палец.
@@ -226,10 +276,6 @@
       applyLink($(sel), C.studio.links.steam);
     });
     applyLink($('#discordBtn'), C.studio.links.discord);
-
-    var mail = $('#mailCard');
-    if (mail) mail.href = 'mailto:' + C.studio.email;
-    $$('[data-studio-email]').forEach(function (el) { el.textContent = C.studio.email; });
 
     var year = $('#year');
     if (year) year.textContent = new Date().getFullYear();
@@ -430,7 +476,7 @@
       });
     }, { rootMargin: '-45% 0px -50% 0px' });
 
-    ['home', 'games', 'about', 'contact'].forEach(function (id) {
+    ['home', 'games', 'about', 'faq', 'contact'].forEach(function (id) {
       var s = document.getElementById(id);
       if (s) io.observe(s);
     });
@@ -499,6 +545,7 @@
       splitHeadings();
       initReveal();
       initFlip();
+      initFaq();
       bindMagnetic();
     });
   }
@@ -640,7 +687,7 @@
 
       var subj = subject || ('POPOQ GAMES — ' + name);
       var body = message + '\n\n— ' + name + ' (' + email + ')';
-      window.location.href = 'mailto:' + C.studio.email +
+      window.location.href = 'mailto:' + EMAIL +
         '?subject=' + encodeURIComponent(subj) +
         '&body=' + encodeURIComponent(body);
 

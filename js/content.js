@@ -10,8 +10,14 @@ window.CONTENT = {
   /* --- Студия и ссылки -------------------------------------------------- */
   studio: {
     name: 'POPOQ GAMES',
-    email: 'hello@popoqgames.com',
     founded: '2026',
+
+    /* Почта разбита на две части намеренно: так её не выдёргивают
+       спам-боты, которые сканируют страницы в поисках строки с «@».
+       На самом сайте адрес нигде не показывается — письмо уходит
+       через форму контактов. Чтобы сменить адрес — правь эти две строки. */
+    emailName: 'techtrekkershop',
+    emailHost: 'gmail.com',
     // Поставь сюда реальные ссылки. '#' = ссылка пока не активна.
     links: {
       steam: '#',
@@ -116,6 +122,48 @@ window.CONTENT = {
     }
   ],
 
+
+  /* --- FAQ --------------------------------------------------------------- */
+  /* Чтобы добавить вопрос — скопируй объект и допиши в массив.              */
+  faq: [
+    {
+      q: { en: 'Can I stream or make videos of your game?',
+           ru: 'Можно стримить игру и снимать по ней видео?' },
+      a: { en: 'Yes. Stream it, record it, upload it, monetise it — no permission needed and no strikes from us. If your video does well, tell us about it, we love watching people play.',
+           ru: 'Да. Стримь, записывай, выкладывай и монетизируй — разрешение не нужно, никаких страйков с нашей стороны. Если ролик зайдёт — расскажи нам, мы обожаем смотреть, как в неё играют.' }
+    },
+    {
+      q: { en: 'Will the game come to consoles?',
+           ru: 'Игра выйдет на консолях?' },
+      a: { en: 'We are focused on PC and Steam first — that is where we can make it the best it can be with a team of three. Consoles are on the table after release, but we will not promise a date we cannot keep.',
+           ru: 'Сначала PC и Steam — втроём мы можем довести до ума именно эту версию. Консоли рассматриваем после релиза, но не будем обещать дату, которую не сможем сдержать.' }
+    },
+    {
+      q: { en: 'Can I get a press or creator key?',
+           ru: 'Можно получить ключ для прессы или контент-мейкеров?' },
+      a: { en: 'Write to us through the form below with a link to your channel, page or outlet. We answer everyone, but keys go out closer to release — so do not worry if the reply takes a while.',
+           ru: 'Напиши через форму ниже и приложи ссылку на канал, страницу или издание. Мы отвечаем всем, но ключи раздаём ближе к релизу — так что не переживай, если ответ придёт не сразу.' }
+    },
+    {
+      q: { en: 'I found a bug. Where do I report it?',
+           ru: 'Нашёл баг. Куда писать?' },
+      a: { en: 'Our Discord is the fastest route — there is a channel for exactly this, and we read it every day. No Discord? The contact form works too. Screenshots and a short description of what you did before it broke help a lot.',
+           ru: 'Быстрее всего — в наш Discord, там есть отдельный канал, и мы читаем его каждый день. Нет Discord — пиши через форму. Сильно помогают скриншоты и короткое описание того, что ты делал перед тем, как всё сломалось.' }
+    },
+    {
+      q: { en: 'I have an idea for a feature. Will you read it?',
+           ru: 'У меня есть идея. Вы её прочитаете?' },
+      a: { en: 'We read every single one. We cannot build everything — three people, one game — but a good chunk of what is in the game right now started as somebody else\'s suggestion.',
+           ru: 'Читаем каждую. Сделать всё мы не можем — три человека и одна игра, — но приличная часть того, что сейчас есть в игре, начиналась как чья-то идея со стороны.' }
+    },
+    {
+      q: { en: 'Are you hiring?',
+           ru: 'Вы ищете людей?' },
+      a: { en: 'Not right now — we are three people and we like it that way for this project. If you do something we should see anyway, send it. We keep good work in mind for later.',
+           ru: 'Сейчас нет — нас трое, и для этого проекта нам так нравится. Но если ты делаешь что-то, на что нам стоит взглянуть, — присылай. Хорошие работы мы запоминаем.' }
+    }
+  ],
+
   /* --- Тексты интерфейса ------------------------------------------------ */
   i18n: {
     en: {
@@ -164,7 +212,13 @@ window.CONTENT = {
       'team.hint': 'Hover to flip',
       'team.hintTouch': 'Tap to flip',
 
-      'contact.label': '04 — Contact',
+      'nav.faq': 'FAQ',
+
+      'faq.label': '04 — FAQ',
+      'faq.title': 'Questions we get a lot',
+      'faq.lead': 'Streaming, consoles, keys, bugs. If your question is not here, the form below is open.',
+
+      'contact.label': '05 — Contact',
       'contact.title': 'Say hello',
       'contact.lead': 'Press, collaborations, bug reports or just a nice word — write to us. We read everything.',
       'contact.name': 'Your name',
@@ -175,7 +229,9 @@ window.CONTENT = {
       'contact.emailPh': 'you@example.com',
       'contact.subjectPh': 'What is this about?',
       'contact.messagePh': 'Tell us everything…',
-      'contact.direct': 'Or write directly',
+      'contact.faqCard': 'Before you write',
+      'contact.faqCardText': 'Streaming, console plans, press keys and bug reports are already answered above — have a look, it is usually faster.',
+      'cta.faq': 'Read the FAQ',
       'contact.community': 'Community',
       'contact.communityText': 'The fastest way to reach us and to see the game grow in real time.',
       'contact.sent': 'Your mail app is opening — we will reply as soon as we can.',
@@ -239,7 +295,13 @@ window.CONTENT = {
       'team.hint': 'Наведи, чтобы перевернуть',
       'team.hintTouch': 'Нажми, чтобы перевернуть',
 
-      'contact.label': '04 — Контакты',
+      'nav.faq': 'Вопросы',
+
+      'faq.label': '04 — Вопросы',
+      'faq.title': 'О чём спрашивают чаще всего',
+      'faq.lead': 'Стриминг, консоли, ключи, баги. Если твоего вопроса тут нет — форма ниже открыта.',
+
+      'contact.label': '05 — Контакты',
       'contact.title': 'Напиши нам',
       'contact.lead': 'Пресса, сотрудничество, баг-репорты или просто доброе слово — пиши. Мы читаем всё.',
       'contact.name': 'Имя',
@@ -250,7 +312,9 @@ window.CONTENT = {
       'contact.emailPh': 'you@example.com',
       'contact.subjectPh': 'О чём речь?',
       'contact.messagePh': 'Расскажи всё…',
-      'contact.direct': 'Или напиши напрямую',
+      'contact.faqCard': 'Прежде чем писать',
+      'contact.faqCardText': 'Про стриминг, консоли, ключи для прессы и баг-репорты уже написано выше — загляни, обычно так быстрее.',
+      'cta.faq': 'Открыть вопросы',
       'contact.community': 'Сообщество',
       'contact.communityText': 'Самый быстрый способ до нас достучаться и следить за игрой в реальном времени.',
       'contact.sent': 'Открываем твой почтовый клиент — ответим как только сможем.',
