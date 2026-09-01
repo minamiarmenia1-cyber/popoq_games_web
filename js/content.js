@@ -18,6 +18,13 @@ window.CONTENT = {
        через форму контактов. Чтобы сменить адрес — правь эти две строки. */
     emailName: 'techtrekkershop',
     emailHost: 'gmail.com',
+
+    /* Ключ доступа с web3forms.com. Пока он пустой, форма работает по-старому —
+       открывает почтовый клиент посетителя. Как только сюда вписан ключ,
+       письмо уходит настоящим POST-запросом, и посетитель адреса не видит
+       вообще: в коде лежит только ключ, а не почта.
+       Где взять: см. раздел «Настоящая отправка формы» в README.md */
+    formAccessKey: '79329e56-b8cc-4c28-92ae-a28bc58145e7',
     // Поставь сюда реальные ссылки. '#' = ссылка пока не активна.
     links: {
       // TODO: заменить на страницу игры в Steam, когда она появится
@@ -236,7 +243,10 @@ window.CONTENT = {
       'cta.faq': 'Read the FAQ',
       'contact.community': 'Community',
       'contact.communityText': 'The fastest way to reach us and to see the game grow in real time.',
-      'contact.sent': 'Your mail app is opening — we will reply as soon as we can.',
+      'contact.sending': 'Sending…',
+      'contact.sent': 'Message sent. We will reply as soon as we can.',
+      'contact.sentMail': 'Your mail app is opening — we will reply as soon as we can.',
+      'contact.error': 'Could not send the message. Try again, or reach us on Discord.',
       'contact.errName': 'Please tell us your name.',
       'contact.errEmail': 'Please enter a valid email.',
       'contact.errMessage': 'Please write a message.',
@@ -319,7 +329,10 @@ window.CONTENT = {
       'cta.faq': 'Открыть вопросы',
       'contact.community': 'Сообщество',
       'contact.communityText': 'Самый быстрый способ до нас достучаться и следить за игрой в реальном времени.',
-      'contact.sent': 'Открываем твой почтовый клиент — ответим как только сможем.',
+      'contact.sending': 'Отправляем…',
+      'contact.sent': 'Сообщение отправлено. Ответим как только сможем.',
+      'contact.sentMail': 'Открываем твой почтовый клиент — ответим как только сможем.',
+      'contact.error': 'Не получилось отправить. Попробуй ещё раз или напиши нам в Discord.',
       'contact.errName': 'Напиши, как тебя зовут.',
       'contact.errEmail': 'Проверь адрес почты.',
       'contact.errMessage': 'Напиши сообщение.',

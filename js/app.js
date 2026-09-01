@@ -655,7 +655,11 @@
   function initForm() {
     var form = $('#contactForm');
     if (!form) return;
-    var note = $('#formNote');
+
+    var note   = $('#formNote');
+    var button = $('button[type="submit"]', form);
+    var label  = button ? $('span', button) : null;
+    var sending = false;
 
     function fieldError(name, msg) {
       var field = form.querySelector('[data-field="' + name + '"]');
@@ -665,36 +669,95 @@
       if (slot) slot.textContent = msg || '';
     }
 
+    function showNote(msg, isError) {
+      if (!note) return;
+      note.textContent = msg;
+      note.classList.add('is-shown');
+      note.classList.toggle('is-error', !!isError);
+    }
+
+    function setSending(state) {
+      sending = state;
+      if (button) button.disabled = state;
+      if (label) label.textContent = I18N.t(state ? 'contact.sending' : 'cta.email');
+    }
+
+    /* Запасной путь: ключа нет — открываем почтовый клиент посетителя. */
+    function sendByMailClient(data) {
+      window.location.href = 'mailto:' + EMAIL +
+        '?subject=' + encodeURIComponent(data.subject) +
+        '&body=' + encodeURIComponent(data.message + '\n\n— ' + data.name + ' (' + data.email + ')');
+      showNote(I18N.t('contact.sentMail'), false);
+    }
+
+    /* Основной путь: письмо уходит через web3forms, посетитель адреса не видит. */
+    function sendByService(key, data) {
+      setSending(true);
+
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          access_key: key,
+          from_name: 'POPOQ GAMES — сайт',
+          subject: data.subject,
+          name: data.name,
+          email: data.email,
+          message: data.message,
+          botcheck: data.botcheck
+        })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+          setSending(false);
+          if (res && res.success) {
+            form.reset();
+            showNote(I18N.t('contact.sent'), false);
+          } else {
+            showNote(I18N.t('contact.error'), true);
+          }
+        })
+        .catch(function () {
+          setSending(false);
+          showNote(I18N.t('contact.error'), true);
+        });
+    }
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+      if (sending) return;
 
-      var name    = form.name.value.trim();
-      var email   = form.email.value.trim();
-      var subject = form.subject.value.trim();
-      var message = form.message.value.trim();
+      // form.elements, а не form.name: у формы есть собственное свойство name,
+      // и при добавлении атрибута name на <form> обращение сломалось бы.
+      var el      = form.elements;
+      var name    = el.name.value.trim();
+      var email   = el.email.value.trim();
+      var subject = el.subject.value.trim();
+      var message = el.message.value.trim();
       var ok = true;
 
-      if (!name)  { fieldError('name', I18N.t('contact.errName')); ok = false; }
-      else        { fieldError('name', ''); }
+      if (!name) { fieldError('name', I18N.t('contact.errName')); ok = false; }
+      else       { fieldError('name', ''); }
 
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { fieldError('email', I18N.t('contact.errEmail')); ok = false; }
-      else                                             { fieldError('email', ''); }
+      else                                                { fieldError('email', ''); }
 
       if (!message) { fieldError('message', I18N.t('contact.errMessage')); ok = false; }
       else          { fieldError('message', ''); }
 
       if (!ok) return;
 
-      var subj = subject || ('POPOQ GAMES — ' + name);
-      var body = message + '\n\n— ' + name + ' (' + email + ')';
-      window.location.href = 'mailto:' + EMAIL +
-        '?subject=' + encodeURIComponent(subj) +
-        '&body=' + encodeURIComponent(body);
+      var data = {
+        name: name,
+        email: email,
+        subject: subject || ('POPOQ GAMES — ' + name),
+        message: message,
+        botcheck: !!(el.botcheck && el.botcheck.checked)
+      };
 
-      if (note) {
-        note.textContent = I18N.t('contact.sent');
-        note.classList.add('is-shown');
-      }
+      var key = C.studio.formAccessKey;
+      if (key && window.fetch) sendByService(key, data);
+      else                     sendByMailClient(data);
     });
 
     // Ошибка снимается, как только пользователь начал править поле.

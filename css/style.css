@@ -1230,6 +1230,13 @@
 }
 
 .form__note.is-shown { opacity: 1; transform: none; }
+.form__note.is-error { color: #E08672; }
+
+/* Кнопка на время отправки */
+.form > .btn:disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
 
 /* --- Боковые карточки --- */
 .contact__side { display: grid; gap: 1rem; }
