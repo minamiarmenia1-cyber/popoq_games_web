@@ -20,7 +20,8 @@ window.CONTENT = {
     emailHost: 'gmail.com',
     // Поставь сюда реальные ссылки. '#' = ссылка пока не активна.
     links: {
-      steam: '#',
+      // TODO: заменить на страницу игры в Steam, когда она появится
+      steam: 'https://store.steampowered.com/',
       discord: '#',
       instagram: '#',
       tiktok: '#'
@@ -42,7 +43,8 @@ window.CONTENT = {
         'assets/placeholders/game-shot-3.svg',
         'assets/placeholders/game-shot-4.svg'
       ],
-      steam: '#',
+      // TODO: заменить на страницу игры в Steam, когда она появится
+      steam: 'https://store.steampowered.com/',
       status: { en: 'IN DEVELOPMENT', ru: 'В РАЗРАБОТКЕ' },
       tagline: {
         en: 'Our first game. Coming to Steam.',
